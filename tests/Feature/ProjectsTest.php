@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Project;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -34,6 +35,21 @@ class ProjectsTest extends TestCase
 
         // If I make get request to the projects route, I expect to see the project title that i've just saved
         $this->get('/projects')->assertSee($attributes['title']);
+    }
+
+    public function test_a_project_requires_a_title(): void
+    {
+        // create() will store it in the db, make() will not store it in the db and raw() will use the raw array keys and values, instead of an object
+        $attributes = Project::factory()->raw(['title' => '']);
+        // if I'm going to give it an empty title in the request, I expect to see (validation) errors
+        $this->post('/projects', $attributes)->assertSessionHasErrors('title');
+    }
+
+    public function test_a_project_requires_a_description(): void
+    {
+        $attributes = Project::factory()->raw(['description' => '']);
+        // if I'm going to give it an empty description in the request, I expect to see (validation) errors
+        $this->post('/projects', $attributes)->assertSessionHasErrors('description');
     }
 }
 
