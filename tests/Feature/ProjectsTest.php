@@ -51,5 +51,15 @@ class ProjectsTest extends TestCase
         // if I'm going to give it an empty description in the request, I expect to see (validation) errors
         $this->post('/projects', $attributes)->assertSessionHasErrors('description');
     }
-}
 
+    public function test_a_user_can_view_a_project90(): void
+    {
+        $this->withoutExceptionHandling();
+        // create a project
+        $project = Project::factory()->create();
+        // if i go to that project's page, I expect to see the title and the description
+        $this->get($project->path())
+            ->assertSee($project->title)
+            ->assertSee($project->description);
+    }
+}
