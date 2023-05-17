@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,6 +20,7 @@ class ProjectFactory extends Factory
         return [
             'title' => fake()->sentence,
             'description' => fake()->paragraph,
+            'owner_id' => User::factory()->create()->id,
         ];
     }
 }
